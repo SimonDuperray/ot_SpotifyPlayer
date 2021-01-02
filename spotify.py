@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Spotify Player
-
-problems:
-    -> mettre à jour le titre et le chanteur quand la chanson skip automatiquement (comparer le titre affiché avec le titre courant)
 """
 
 import requests
@@ -12,7 +9,6 @@ from IPython.display import display
 from tkinter import *
 import time
 import base64
-import sched
 import threading
 
 CLIENT_ID = ""
