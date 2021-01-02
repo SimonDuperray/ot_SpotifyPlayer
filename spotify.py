@@ -10,6 +10,7 @@ from datetime import datetime
 import datetime
 from IPython.display import display
 from tkinter import *
+import time
 
 USER_ID = ""
 TOKEN = ""
@@ -81,14 +82,15 @@ def play():
 
 def next():
     requests.post(requests_kinds['next'], headers=headers)
-    # request
     requests.post(requests_kinds['previous'], headers=headers)
     print("next: "+str(requests.post(requests_kinds['next'], headers=headers)))
+    time.sleep(1)
 
 def previous():
     requests.post(requests_kinds['previous'], headers=headers)
     requests.post(requests_kinds['next'], headers=headers)
     print("previous: "+str(requests.post(requests_kinds['previous'], headers=headers)))
+    time.sleep(1)
 
 def shuffle():
     requests.put(requests_kinds['shuffle'], headers=headers)
@@ -140,7 +142,7 @@ next_button = Button(gui, text="Next", command=lambda:[next(), update_current_so
 next_button.pack()
 
 # previous
-previous_button = Button(gui, text="Previous", command=previous)
+previous_button = Button(gui, text="Previous", command=lambda:[previous(), update_current_song()])
 previous_button.pack()
 
 # shuffle
