@@ -11,10 +11,10 @@ import time
 import base64
 import threading
 
-CLIENT_ID = ""
-CLIENT_SECRET = ""
-USER_ID = ""
-TOKEN = ""
+CLIENT_ID = "852d2d438d2b4b1eb704e70aab2b816c"
+CLIENT_SECRET = "a274dec37901402aa4a85a6f838d2d7e"
+USER_ID = "simon.duperray49"
+TOKEN = "BQD7jodY7nyATKGyUTmPfZ6qlJOxxBQ3amonh2ISh-knkWMNEJ4fpA6kFdBx0HX6xef1XXXroZXVzFIHFWYwPaNNN9dcqnsTuXSKiiGuWrge1whk6l9wlHqbOpWnKCK1WzN7zk7hsr5X8Pm8ybF_Yk3nTIpBA4jUIFHZqQMuVH1LJUN-8apHZeWhPIJK39kmyrswyOk70VU79w3Xmzdhn3YsCGRFbPz4SjasZ1LE4w4pRuRp8r9J0uprQVtMf6QGFzXZ4uweb1hHZsydnT0pwCyR1gY"
 
 headers = {
     "Accept": "application/json",
@@ -190,10 +190,6 @@ elif list(requests_kinds['repeat'])[-1]=='k':
     repeat_state.set('true')
 repeat_label = Label(gui, textvariable=repeat_state)
 repeat_label.pack()
-
-# check current song
-check_current_song_button = Button(gui, text="Check", command=check_current_song)
-check_current_song_button.pack()
 
 # repeat check
 check_current_song()
