@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Spotify Player
+
+problems:
+    -> mettre à jour le titre et le chanteur quand la chanson skip automatiquement (comparer le titre affiché avec le titre courant)
 """
 
 import requests
@@ -8,9 +11,14 @@ import json
 from IPython.display import display
 from tkinter import *
 import time
+import base64
+import sched
+import threading
 
-USER_ID = "simon.duperray49"
-TOKEN = "BQAbiseK55YV7FW13q2awbcosruSQvb65Q0WRxhpu9dR12TKRTdi_PMBhIilmHPNF9beCWXuTmZURuDaZtZhWnPcqlEHj02UV7Seks8KY484GC8A9NFcx4-_aLlIXvE-2eeE2FboD9IU0C_b5fjoF3sEQCuAjmSWibiaM_hzIb137MamEfGRLitVCsePZIzUYDpwxpMIJxmGzunmoeNuoEDNTL49fd_0Pjnb7LjygOgGdTFGrrGFZGMRKSkHHARmgRRTlUbfavJIIYlwz6HlNA3HA3M"
+CLIENT_ID = ""
+CLIENT_SECRET = ""
+USER_ID = ""
+TOKEN = ""
 
 headers = {
     "Accept": "application/json",
@@ -111,6 +119,27 @@ def repeat():
         pass
     print("repeat: "+str(list(requests.get(requests_kinds['repeat'], headers=headers)))+' state: '+repeat_state.get())
 
+def check_current_song():
+    threading.Timer(10.0, check_current_song).start()
+    displayed_title, displayed_singer = title_variable.get(), singer_variable.get()
+    # get current title
+    current_title_request = requests.get(requests_kinds['currently_playing'], headers=headers).json()
+    current_title = current_title_request['item']['name']
+    # get current singer
+    current_singer_request = requests.get(requests_kinds['currently_playing'], headers=headers).json()
+    current_singer = current_singer_request['item']['album']['artists'][0]['name']
+    # boolean statements
+    isTitleEqual = (displayed_title==current_title)
+    isSingerEqual = (displayed_singer==current_singer)
+    if isTitleEqual==False and isSingerEqual==False:
+        # update current title and singer
+        title_variable.set(current_title)
+        singer_variable.set(current_singer)
+        print("UPDATED")
+    else:
+        pass
+
+
 gui = Tk()
 gui.geometry("300x300")
 
@@ -165,6 +194,13 @@ elif list(requests_kinds['repeat'])[-1]=='k':
     repeat_state.set('true')
 repeat_label = Label(gui, textvariable=repeat_state)
 repeat_label.pack()
+
+# check current song
+check_current_song_button = Button(gui, text="Check", command=check_current_song)
+check_current_song_button.pack()
+
+# repeat check
+check_current_song()
 
 # run
 gui.mainloop()
