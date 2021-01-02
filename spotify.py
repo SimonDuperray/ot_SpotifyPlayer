@@ -3,17 +3,14 @@
 Spotify Player
 """
 
-import pandas as pd
 import requests
 import json
-from datetime import datetime
-import datetime
 from IPython.display import display
 from tkinter import *
 import time
 
-USER_ID = ""
-TOKEN = ""
+USER_ID = "simon.duperray49"
+TOKEN = "BQAbiseK55YV7FW13q2awbcosruSQvb65Q0WRxhpu9dR12TKRTdi_PMBhIilmHPNF9beCWXuTmZURuDaZtZhWnPcqlEHj02UV7Seks8KY484GC8A9NFcx4-_aLlIXvE-2eeE2FboD9IU0C_b5fjoF3sEQCuAjmSWibiaM_hzIb137MamEfGRLitVCsePZIzUYDpwxpMIJxmGzunmoeNuoEDNTL49fd_0Pjnb7LjygOgGdTFGrrGFZGMRKSkHHARmgRRTlUbfavJIIYlwz6HlNA3HA3M"
 
 headers = {
     "Accept": "application/json",
