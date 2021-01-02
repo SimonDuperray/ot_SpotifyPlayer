@@ -37,10 +37,10 @@ requests_kinds = {
 currently_playing_request = requests.get(requests_kinds['currently_playing'], headers=headers)
 currently_playing_data = currently_playing_request.json()
 
-"""#### Songer"""
+"""#### Singer"""
 
-currently_playing_songer = currently_playing_data['item']['album']['artists'][0]['name']
-print(currently_playing_songer)
+currently_playing_singer = currently_playing_data['item']['album']['artists'][0]['name']
+print(currently_playing_singer)
 
 """### Title"""
 
@@ -57,6 +57,20 @@ print("device id: "+str(device_id))
 
 # Graphic User Interface
 
+def update_current_song():
+        # set new current title
+        new_current_title_request = requests.get(requests_kinds['currently_playing'], headers=headers).json()
+        new_current_title = new_current_title_request['item']['name']
+        title_variable.set(new_current_title)
+        # set new current singer
+        new_current_singer_request = requests.get(requests_kinds['currently_playing'], headers=headers).json()
+        new_current_singer = new_current_singer_request['item']['album']['artists'][0]['name']
+        singer_variable.set(new_current_singer)
+        # print updated title & singer
+        print("======================================================")
+        print("new title: "+str(title_variable.get()))
+        print("new singer: "+str(singer_variable.get()))
+
 def pause():
     requests.put(requests_kinds['pause'], headers=headers)
     print("pause: "+str(requests.put(requests_kinds['pause'], headers=headers)))
@@ -67,6 +81,7 @@ def play():
 
 def next():
     requests.post(requests_kinds['next'], headers=headers)
+    # request
     requests.post(requests_kinds['previous'], headers=headers)
     print("next: "+str(requests.post(requests_kinds['next'], headers=headers)))
 
@@ -99,26 +114,58 @@ def repeat():
 
 gui = Tk()
 gui.geometry("300x300")
-title_label = Label(gui, text=currently_playing_title).pack()
-songer_label = Label(gui, text=currently_playing_songer).pack()
-pause_button = Button(gui, text="Pause", command=pause).pack()
-play_button = Button(gui, text="Play", command=play).pack()
-next_button = Button(gui, text="Next", command=next).pack()
-previous_button = Button(gui, text="Previous", command=previous).pack()
-shuffle_button = Button(gui, text="Shuffle", command=shuffle).pack()
+
+# title
+title_variable = StringVar()
+title_variable.set(currently_playing_title)
+title_label = Label(gui, textvariable=title_variable)
+title_label.pack()
+
+# singer
+singer_variable = StringVar()
+singer_variable.set(currently_playing_singer)
+singer_label = Label(gui, textvariable=singer_variable)
+singer_label.pack()
+
+# pause
+pause_button = Button(gui, text="Pause", command=pause)
+pause_button.pack()
+
+#play
+play_button = Button(gui, text="Play", command=play)
+play_button.pack()
+
+# next
+next_button = Button(gui, text="Next", command=lambda:[next(), update_current_song()])
+next_button.pack()
+
+# previous
+previous_button = Button(gui, text="Previous", command=previous)
+previous_button.pack()
+
+# shuffle
+shuffle_button = Button(gui, text="Shuffle", command=shuffle)
+shuffle_button.pack()
 shuffle_state = StringVar()
+
 # conditional rendering shuffle state
 if list(requests_kinds['shuffle'])[-2]=='s':
     shuffle_state.set('false')
 elif list(requests_kinds['shuffle'])[-2]=='u':
     shuffle_state.set('true')
-shuffle_label = Label(gui, textvariable=shuffle_state).pack()
-repeat_button = Button(gui, text="Repeat", command=repeat).pack()
+shuffle_label = Label(gui, textvariable=shuffle_state)
+shuffle_label.pack()
+repeat_button = Button(gui, text="Repeat", command=repeat)
+repeat_button.pack()
 repeat_state = StringVar()
+
 # conditional rendering repeat state
 if list(requests_kinds['repeat'])[-1]=='f':
     repeat_state.set("false")
 elif list(requests_kinds['repeat'])[-1]=='k':
     repeat_state.set('true')
-repeat_label = Label(gui, textvariable=repeat_state).pack()
+repeat_label = Label(gui, textvariable=repeat_state)
+repeat_label.pack()
+
+# run
 gui.mainloop()
